@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import SearchItem from './SearchItem';
 import Header from './Header';
 import Content from './Content';
 import AddItem from './AddItem';
@@ -6,15 +7,16 @@ import Footer from './Footer';
 
 function App() {
   const [items, setItems] = useState(JSON.parse(localStorage.getItem('shoppinglist')))
+  // 新增的項目
+  const [newItem, setNewItem] = useState('')
+  const [search, setSearch] = useState('')
 
   const setAndSaveItems = (newItems)=>{
     setItems(newItems)
     localStorage.setItem('shoppinglist', JSON.stringify(newItems))
   }
-
-  // 新增的項目
-  const [newItem, setNewItem] = useState('')
-  // 理解這段func
+  
+  // **理解這段func
   const addItem = (item) => {
     const id = items.length ? items[items.length - 1].id + 1 : 1;
     const myNewItem = {id, checked:false, item };
@@ -46,14 +48,19 @@ function App() {
   
   return (
     <div className="App">
-      <Header title="Doris List"/>
+      <Header title="Grocery List"/>
       <AddItem
         newItem={newItem}
         setNewItem={setNewItem}
         handleSubmit={handleSubmit}
       />
+      <SearchItem
+        search={search}
+        setSearch={setSearch}
+      />
       <Content 
-        items={items}
+      // 先篩選完再往下傳給child 元件去map
+        items={items.filter(value =>((value.item).toLowerCase()).includes(search.toLowerCase()))}
         handleCheck={handleCheck}
         handleDelete={handleDelete}
       />
