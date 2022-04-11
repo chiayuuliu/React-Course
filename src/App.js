@@ -5,6 +5,8 @@ import Content from './Content';
 import AddItem from './AddItem';
 import Footer from './Footer';
 
+// spinner
+import Spinner from './components/Spinner';
 
 function App() {
 
@@ -87,7 +89,8 @@ function App() {
       />
       <main>
       {/* isLoading 是true 的時候載入後面的字樣 */}
-      {isLoading && <p>Loading Items...</p>}
+      {isLoading && <Spinner isLoading={isLoading}/>}
+      {/* {isLoading && <p>Loading Items...</p>} */}
       {/* 如果api有誤，顯示錯誤訊息 */}
         {fetchError && <p style={{color:"red"}}>{`Error: ${fetchError}`}</p>}
 
