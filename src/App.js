@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SearchItem from './SearchItem';
 import Header from './Header';
 import Content from './Content';
@@ -7,35 +7,59 @@ import Footer from './Footer';
 
 
 function App() {
-  const [items, setItems] = useState(JSON.parse(localStorage.getItem('shoppinglist')))
+
+  // 用json server 建立的api 
+  const API_URL = 'http://localhost:3500/items'
+
+  // 從local 拿資料：如果沒有設定|| [] 當localstorage裡面沒有存任何資料，就會出現錯誤，因為item 無法filter 東西
+  // const [items, setItems] = useState(JSON.parse(localStorage.getItem('shoppinglist')) || [])
+
+  const [items, setItems] = useState([])
+
   // 新增的項目
   const [newItem, setNewItem] = useState('')
   const [search, setSearch] = useState('')
+  const [fetchError, setFetchError] = useState(null)
 
-  const setAndSaveItems = (newItems)=>{
-    setItems(newItems)
-    localStorage.setItem('shoppinglist', JSON.stringify(newItems))
-  }
+
+
+  // items 有變動就更新localstorage
+  useEffect(()=>{
+    const fetchItem = async()=>{
+      try{
+        const response = await fetch(API_URL)
+        // response 有個ok狀態可以判定api 是否有資料回來，沒有的話把錯誤訊息丟出來，避免網頁出現error頁面，即便沒有回傳資料，網頁也不錯出錯誤，會是空陣列給items
+        console.log(response)
+        if(!response.ok) throw Error('Did not receive expected data')
+
+        const listItems = await response.json();
+        console.log('res',response)
+        console.log('list',listItems)
+        setItems(listItems)
+        setFetchError(null)
+      }catch(err){
+        console.log('err',err.message)
+        setFetchError(err.message)
+      }
+    }
+    (async()=> await fetchItem())()
+  },[])
   
-  // **理解這段func
   const addItem = (item) => {
     const id = items.length ? items[items.length - 1].id + 1 : 1;
     const myNewItem = {id, checked:false, item };
     const listItems = [...items, myNewItem];
-    console.log('id',id)
-    console.log('myNewItem',myNewItem)
-    console.log('listItems',listItems)
-    setAndSaveItems(listItems)
+    setItems(listItems)
   }
 
   const handleCheck = (id) =>{
     const listItems = items.map((item) => item.id === id ? {...item, checked: !item.checked} : item)
-    setAndSaveItems(listItems)
+    setItems(listItems)
   }
 
   const handleDelete = (id) => {
     const listItems = items.filter((item)=> item.id !== id)
-    setAndSaveItems(listItems)
+    setItems(listItems)
   }
 
   const handleSubmit = (e) => {
@@ -60,12 +84,20 @@ function App() {
         search={search}
         setSearch={setSearch}
       />
-      <Content 
-      // 先篩選完再往下傳給child 元件去map
-        items={items.filter(value =>((value.item).toLowerCase()).includes(search.toLowerCase()))}
-        handleCheck={handleCheck}
-        handleDelete={handleDelete}
-      />
+      <main>
+      {/* 如果api有誤，顯示錯誤訊息 */}
+        {fetchError && <p style={{color:"red"}}>{`Error: ${fetchError}`}</p>}
+
+      {/* 如果api 沒有錯誤才顯示內容 */}
+        {!fetchError &&
+        <Content 
+          // 先篩選完再往下傳給child 元件去map
+          items={items.filter(value =>((value.item).toLowerCase()).includes(search.toLowerCase()))}
+          handleCheck={handleCheck}
+          handleDelete={handleDelete}
+        />
+        }        
+      </main>
       <Footer
         length = {items.length}
       />
