@@ -187,3 +187,36 @@ button:hover {
   border-bottom: 2px solid rgba(0, 0, 139, 0.5);
   outline: none;
 }
+
+/* color change */
+
+.colorbox{
+  width: 400px;
+  height: 400px;
+  border: 1px solid lightgray;
+  margin: 20px;
+  border-radius: 20px;
+  box-shadow: 5px 5px 10px rgba(211, 211, 211, 0.504);
+  text-align: center;
+  line-height: 400px;
+
+}
+.boxcolor{
+  width: 300px;
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+/* color Course */
+
+.square{
+  width: 400px;
+  height: 400px;
+  border: 1px solid rgba(0, 0, 0, 0.449);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.459);
+  border-radius: 0.25rem;
+  text-align: center;
+  line-height: 400px;
+  margin: 20px;
+}

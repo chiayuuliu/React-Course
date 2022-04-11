@@ -5,6 +5,7 @@ import Content from './Content';
 import AddItem from './AddItem';
 import Footer from './Footer';
 
+
 function App() {
   const [items, setItems] = useState(JSON.parse(localStorage.getItem('shoppinglist')))
   // 新增的項目
@@ -47,6 +48,7 @@ function App() {
   }
   
   return (
+
     <div className="App">
       <Header title="Grocery List"/>
       <AddItem
@@ -68,6 +70,9 @@ function App() {
         length = {items.length}
       />
     </div>
+    
+      
+    
   );
 }
 
