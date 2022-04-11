@@ -21,7 +21,7 @@ function App() {
   const [search, setSearch] = useState('')
   const [fetchError, setFetchError] = useState(null)
 
-
+  const [isLoading, setIsLoading] = useState(true); 
 
   // items 有變動就更新localstorage
   useEffect(()=>{
@@ -29,20 +29,21 @@ function App() {
       try{
         const response = await fetch(API_URL)
         // response 有個ok狀態可以判定api 是否有資料回來，沒有的話把錯誤訊息丟出來，避免網頁出現error頁面，即便沒有回傳資料，網頁也不錯出錯誤，會是空陣列給items
-        console.log(response)
         if(!response.ok) throw Error('Did not receive expected data')
-
         const listItems = await response.json();
-        console.log('res',response)
         console.log('list',listItems)
         setItems(listItems)
         setFetchError(null)
       }catch(err){
         console.log('err',err.message)
         setFetchError(err.message)
+      }finally{
+        setIsLoading(false)
       }
     }
-    (async()=> await fetchItem())()
+    setTimeout(() => {
+      (async()=> await fetchItem())()
+    }, 1000);
   },[])
   
   const addItem = (item) => {
@@ -85,11 +86,13 @@ function App() {
         setSearch={setSearch}
       />
       <main>
+      {/* isLoading 是true 的時候載入後面的字樣 */}
+      {isLoading && <p>Loading Items...</p>}
       {/* 如果api有誤，顯示錯誤訊息 */}
         {fetchError && <p style={{color:"red"}}>{`Error: ${fetchError}`}</p>}
 
-      {/* 如果api 沒有錯誤才顯示內容 */}
-        {!fetchError &&
+      {/* 如果api沒有錯誤，也不是載入中，才顯示內容 */}
+        {!fetchError && !isLoading &&
         <Content 
           // 先篩選完再往下傳給child 元件去map
           items={items.filter(value =>((value.item).toLowerCase()).includes(search.toLowerCase()))}
