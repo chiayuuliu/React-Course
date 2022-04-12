@@ -220,3 +220,36 @@ button:hover {
   line-height: 400px;
   margin: 20px;
 }
+/* fetch data 練 */
+.btnWrap{
+  width: 100%;
+  height: 50px;
+  position: fixed;
+  top: 0;
+  display: flex;
+  background-color: #fff;
+  z-index: 3;
+}
+.btnWrap button{
+  flex: 1;
+  border: 1px solid rgba(0, 0, 139, 0.5);
+  border-radius: 0px;
+}
+.datawrap{
+  width: 100%;
+  height: calc(100% - 50px);
+  position: absolute;
+  top: 50px;
+  padding: 10px;
+}
+/* 正式寫法 */
+.dataform{
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+.btnwrap button{
+  flex: 1;
+  border: 1px solid lightblue;
+  border-radius: 0px;
+}

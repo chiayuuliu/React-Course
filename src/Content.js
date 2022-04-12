@@ -1,7 +1,6 @@
-import React from 'react'
-import ItemList from './ItemList'
-const Content = ({items,handleCheck,handleDelete}) => {
-
+import React from "react";
+import ItemList from "./ItemList";
+const Content = ({ items, handleCheck, handleDelete }) => {
   // 會隨機給0-3之間的整數
   // 隨機取名子出來
   // const HandleNameChange = ()=>{
@@ -9,7 +8,7 @@ const Content = ({items,handleCheck,handleDelete}) => {
   //   const int = Math.floor(Math.random()*3)
   //   setName(names[int]);
   // }
-  
+
   return (
     <>
       {items.length ? (
@@ -19,10 +18,10 @@ const Content = ({items,handleCheck,handleDelete}) => {
           handleDelete={handleDelete}
         />
       ) : (
-        <p style={{ marginTop:'2rem'}}>Your list is empty</p>
+        <p style={{ marginTop: "2rem" }}>Your list is empty</p>
       )}
     </>
-  )
-}
+  );
+};
 
-export default Content
+export default Content;
